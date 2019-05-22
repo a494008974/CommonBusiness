@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>index</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <table class="center table table-bordered" border="3">
+                <tr align="center" >
+                    <th>ID</th>
+                    <th>URL</th>
+                    <th>PATH</th>
+                    <th>PKG</th>
+                    <th>ACTION</th>
+                    <th>ISACT</th>
+                    <th>CREATETIME</th>
+                    <th>ISNET</th>
+                </tr>
+                <tr v-for="item in hotels" >
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.url }}</td>
+                    <td>{{ item.path }}</td>
+                    <td>{{ item.pkg }}</td>
+                    <td>{{ item.action }}</td>
+                    <td>{{ item.isAct }}</td>
+                    <td>{{ item.createTime }}</td>
+                    <td>{{ item.isNet }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/vue.js"></script>
+        <script src="js/vue-resource.min.js"></script>
+        <script src="js/main.js"></script>
+    </body>
+</html>
