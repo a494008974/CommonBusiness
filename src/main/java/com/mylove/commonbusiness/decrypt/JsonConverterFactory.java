@@ -50,6 +50,7 @@ public class JsonConverterFactory extends Converter.Factory {
                                                           Annotation[] methodAnnotations,
                                                           Retrofit retrofit) {
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
+        System.out.println();
         return new JsonRequestBodyConverter<>(gson, adapter); //请求
     }
 

@@ -29,18 +29,20 @@ public class JsonRequestBodyConverter<T> implements Converter<T, RequestBody> {
 
     @Override
     public RequestBody convert(T value) throws IOException {
+
         return null;
     }
+
 //    @Override
 //    public RequestBody convert(T value) throws IOException {
-//        //加密
-////        APIBodyData data = new APIBodyData();
-////        Log.i("xiaozhang", "request中传递的json数据：" + value.toString());
-////        data.setData(XXTEA.Encrypt(value.toString(), HttpConstant.KEY));
-////        String postBody = gson.toJson(data); //对象转化成json
-////        Log.i("xiaozhang", "转化后的数据：" + postBody);
-////        return RequestBody.create(MEDIA_TYPE, postBody);
-//        return RequestBody.create(MEDIA_TYPE,value);
+        //加密
+//        APIBodyData data = new APIBodyData();
+//        Log.i("xiaozhang", "request中传递的json数据：" + value.toString());
+//        data.setData(XXTEA.Encrypt(value.toString(), HttpConstant.KEY));
+//        String postBody = gson.toJson(data); //对象转化成json
+//        Log.i("xiaozhang", "转化后的数据：" + postBody);
+//        return RequestBody.create(MEDIA_TYPE, postBody);
+//        return RequestBody.create();
 //    }
 
 }

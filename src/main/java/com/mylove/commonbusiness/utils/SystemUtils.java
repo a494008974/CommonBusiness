@@ -162,43 +162,6 @@ public class SystemUtils {
 		return hash;
 	}
 
-	public static boolean isNetworkAvailable(Context context) {  
-	    ConnectivityManager connectivity = (ConnectivityManager) context  
-	            .getSystemService(Context.CONNECTIVITY_SERVICE);  
-	    if (connectivity == null) {  
-	    	Log.e(TAG, "getSystemService rend null");  
-	    } else { 
-	        NetworkInfo[] info = connectivity.getAllNetworkInfo();  
-	        if (info != null) { 
-	            for (int i = 0; i < info.length; i++) {  
-	                if (info[i].getState() == NetworkInfo.State.CONNECTED) {  
-	                    return true;  
-	                }  
-	            }  
-	        }  
-	    }  
-	    return false;  
-	}
-	
-    /**
-     * get current data connection type name, like:Mobile/WIFI/OFFLINE
-     * 
-     * @param context
-     * @return
-     */
-    public static String getConnectTypeName(Context context) {
-            if (!isNetworkAvailable(context)) {
-                    return "OFFLINE";
-            }
-            ConnectivityManager manager = (ConnectivityManager) context
-                            .getSystemService(Activity.CONNECTIVITY_SERVICE);
-            NetworkInfo info = manager.getActiveNetworkInfo();
-            if (info != null) {
-                    return info.getTypeName();
-            } else {
-                    return "OFFLINE";
-            }
-    }
     
     public static String getLocalMacAddress(Context ctx) {  
     	/*
@@ -292,37 +255,6 @@ public class SystemUtils {
 		return ampmValues;
 	}
 
-	public static String getIPAddress(Context context) {
-		NetworkInfo info = ((ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
-		if (info != null && info.isConnected()) {
-			if (info.getType() == ConnectivityManager.TYPE_ETHERNET) {//当前使用2G/3G/4G网络
-				try {
-					//Enumeration<NetworkInterface> en=NetworkInterface.getNetworkInterfaces();
-					for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-						NetworkInterface intf = en.nextElement();
-						for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-							InetAddress inetAddress = enumIpAddr.nextElement();
-							if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
-								return inetAddress.getHostAddress();
-							}
-						}
-					}
-				} catch (SocketException e) {
-					e.printStackTrace();
-				}
-
-			} else if (info.getType() == ConnectivityManager.TYPE_WIFI) {//当前使用无线网络
-				WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-				WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-				String ipAddress = intIP2StringIP(wifiInfo.getIpAddress());//得到IPV4地址
-				return ipAddress;
-			}
-		} else {
-			//当前无网络连接,请在设置中打开网络
-		}
-		return null;
-	}
 
 	public static String intIP2StringIP(int ip) {
 		return (ip & 0xFF) + "." +
@@ -481,19 +413,15 @@ public class SystemUtils {
 				ActivityManager.RunningAppProcessInfo apinfo = list.get(i);
 				String[] pkgList = apinfo.pkgList;
 				String processName = apinfo.processName;
-				if (processName != null && (
-						"system".equals(processName)
+				if (processName != null
+						&& !processName.contains("com.mylove.galaxy")
+						&& (   "system".equals(processName)
 								|| "com.android.phone".equals(processName)
 								|| "android.process.acore".equals(processName)
 								|| "com.yunos.tv.probe".equals(processName)
 								|| "com.ph.remote".equals(processName)
 								|| "com.linkin.provider".equals(processName)
 								||  context.getPackageName().equals(processName)
-								|| "com.voole.epg".equals(processName)
-								|| "com.rockitv.ai".equals(processName)
-								|| "com.rockitv.android".equals(processName)
-								|| "com.iflytek.xiri2.system".equals(processName)
-								|| "tv.yuyin".equals(processName)
 								|| "com.ce3g.android.v5im".equals(processName)
 								|| "com.android.inputmethod.latin".equals(processName)
 								|| "com.android.inputmethod.pinyin".equals(processName)
@@ -518,6 +446,7 @@ public class SystemUtils {
 		Process sh = null;
 		try {
 			final String Command = "am force-stop " + pkgName + "\n";
+			System.out.println(Command);
 			sh = Runtime.getRuntime().exec(Command);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

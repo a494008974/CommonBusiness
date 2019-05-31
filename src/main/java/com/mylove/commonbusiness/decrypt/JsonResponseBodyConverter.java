@@ -6,6 +6,7 @@ import com.mylove.commonbusiness.utils.DesHelper;
 
 import java.io.IOException;
 
+import me.jessyan.armscomponent.commonres.utils.Contanst;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 
@@ -35,9 +36,17 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
     @Override
     public T convert(ResponseBody responseBody) throws IOException {
         String response = responseBody.string();
-        response = DesHelper.decrypt(response,"win8fafa");
+
+        String result = "";
+        for (int i=0; i<Contanst.strKey.length; i++){
+            result = DesHelper.decrypt(response,Contanst.strKey[i]);
+            if(!"fail".equals(result)){
+                break;
+            }
+        }
+        System.out.println("RESULT => "+result);
         try{
-            return adapter.fromJson(response);
+            return adapter.fromJson(result);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
